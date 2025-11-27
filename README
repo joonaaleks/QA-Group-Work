@@ -2,6 +2,7 @@ THIS IS QA GROUP WORK TEST FRAMEWORK FOR EXECUTING OUR TEST PLAN
 
 ##### Install Instructions #####
 
+Option 1:
 1. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
     -After install, make sure Docker is running
 2. Clone this repository
@@ -10,7 +11,7 @@ THIS IS QA GROUP WORK TEST FRAMEWORK FOR EXECUTING OUR TEST PLAN
 4. Run command
     docker run --rm robot-tests
 
-
+Option 2:
 To run the tests without Docker using RobotCode extension in VSCode:
 1. Install Python 3.13.x
     -https://www.python.org/downloads/release/python-3139/
