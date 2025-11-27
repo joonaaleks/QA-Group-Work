@@ -3,7 +3,7 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies
+# Install System Dependencies
 RUN apt-get update && apt-get install -y \
     wget unzip curl gnupg \
     libx11-6 \
@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Install matching Chrome-for-Testing
+# Install Chrome and Chromedriver
 RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.175/linux64/chrome-linux64.zip \
     && unzip chrome-linux64.zip \
     && mv chrome-linux64 /opt/chrome \
@@ -44,17 +44,15 @@ RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.
     && chmod +x /usr/local/bin/chromedriver \
     && rm -rf chromedriver-linux64*
 
-
 # Add Chrome to PATH
 ENV PATH="/opt/chrome/chrome-linux64:${PATH}"
 
-# Install Python libs
+# Install Dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files (your structure)
 COPY . /robot
 WORKDIR /robot
 
-# Run Robot tests on container start
+# Run Robot tests
 CMD ["sh", "run-tests.sh"]
