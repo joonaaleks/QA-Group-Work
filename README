@@ -14,11 +14,13 @@ This installation was done with VSCode
 
 
 To run the tests without Docker using RobotCode extension:
-1. Install Python 3.13
-2. Install VSCode extension:
+1. Install Python 3.13.x
+    -https://www.python.org/downloads/release/python-3139/
+2. Install VSCode extensions:
     -RobotCode by Daniel Biehl
+    -Python by Microsoft
 3. Open terminal to the project root folder and run command
-    python -m venv .venv
+    py -3.13 -m venv .venv
 4. Install dependencies by running command
     .venv\Scripts\pip install -r requirements.txt
 5. Press: 
