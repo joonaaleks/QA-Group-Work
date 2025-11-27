@@ -8,4 +8,8 @@ This installation was done with VSCode, which is recommended IDE as it contains 
     -After install, make sure Docker is running
 2. Recommended to install VSCode extension:
     -RobotCode by Daniel Biehl
-
+3. Clone this repository
+4. Open terminal to the project root folder and run command
+    docker build -t robot-tests .
+5. Run command
+    docker run --rm robot-tests
