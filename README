@@ -26,4 +26,4 @@ CTRL+Shift+P
 Python: Select Interpreter
 .venv (3.13.x)
 6. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
-Note: If encountering an error "File not found", check that your run-tests.sh End of Line Sequence is "LF"
+Note: If encountering an error "File not found", check that your run-tests.sh End of Line Sequence is set to "LF"
