@@ -2,8 +2,6 @@ THIS IS QA GROUP WORK TEST FRAMEWORK FOR EXECUTING OUR TEST PLAN
 
 ##### Install Instructions #####
 
-This installation was done with VSCode
-
 1. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
     -After install, make sure Docker is running
 2. Clone this repository
@@ -13,7 +11,7 @@ This installation was done with VSCode
     docker run --rm robot-tests
 
 
-To run the tests without Docker using RobotCode extension:
+To run the tests without Docker using RobotCode extension in VSCode:
 1. Install Python 3.13.x
     -https://www.python.org/downloads/release/python-3139/
 2. Install VSCode extensions:
@@ -28,3 +26,4 @@ CTRL+Shift+P
 Python: Select Interpreter
 .venv (3.13.x)
 6. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
+Note: If encountering an error "File not found", check that your run-tests.sh End of Line Sequence is "LF"
