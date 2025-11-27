@@ -2,14 +2,29 @@ THIS IS QA GROUP WORK TEST FRAMEWORK FOR EXECUTING OUR TEST PLAN
 
 ##### Install Instructions #####
 
-This installation was done with VSCode, which is recommended IDE as it contains RobotCode extension
+This installation was done with VSCode
 
 1. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
     -After install, make sure Docker is running
-2. Recommended to install VSCode extension:
-    -RobotCode by Daniel Biehl
-3. Clone this repository
-4. Open terminal to the project root folder and run command
+2. Clone this repository
+3. Open terminal to the project root folder and run command
     docker build -t robot-tests .
-5. Run command
+4. Run command
     docker run --rm robot-tests
+
+
+To run the tests without Docker using RobotCode extension:
+1. Install Python 3.13
+2. Install VSCode extension:
+    -RobotCode by Daniel Biehl
+3. Open terminal to the project root folder and run command
+    python -m venv .venv
+4. Install dependencies by running command
+    .venv\Scripts\pip install -r requirements.txt
+5. Press: 
+CTRL+Shift+P
+Python: Select Interpreter
+.venv (3.13.x)
+6. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
+
+NOTE: Chrome has to be run in headless mode without GUI (default) in Docker. You are able to run the automated tests with GUI locally if you don't use docker and comment the line 

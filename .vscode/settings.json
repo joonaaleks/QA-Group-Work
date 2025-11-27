@@ -4,5 +4,6 @@
 
   "robotcode.robot.pythonPath": [
     "${workspaceFolder}/.venv/Scripts/python.exe"
-  ]
+  ],
+  "python-envs.pythonProjects": []
 }
