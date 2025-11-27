@@ -1,0 +1,11 @@
+THIS IS QA GROUP WORK TEST FRAMEWORK FOR EXECUTING OUR TEST PLAN
+
+##### Install Instructions #####
+
+This installation was done with VSCode, which is recommended IDE as it contains RobotCode extension
+
+1. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
+    -After install, make sure Docker is running
+2. Recommended to install VSCode extension:
+    -RobotCode by Daniel Biehl
+
