@@ -28,5 +28,3 @@ CTRL+Shift+P
 Python: Select Interpreter
 .venv (3.13.x)
 6. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
-
-NOTE: Chrome has to be run in headless mode without GUI (default) in Docker. You are able to run the automated tests with GUI locally if you don't use docker and comment the line 
