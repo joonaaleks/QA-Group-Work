@@ -13,18 +13,19 @@ Option 1:
 
 Option 2:
 To run the tests without Docker using RobotCode extension in VSCode:
-1. Install Python 3.13.x
+1. Clone this repository
+2. Install Python 3.13.x
     -https://www.python.org/downloads/release/python-3139/
-2. Install VSCode extensions:
+3. Install VSCode extensions:
     -RobotCode by Daniel Biehl
     -Python by Microsoft
-3. Open terminal to the project root folder and run command
+4. Open terminal to the project root folder and run command
     py -3.13 -m venv .venv
-4. Install dependencies by running command
+5. Install dependencies by running command
     .venv\Scripts\pip install -r requirements.txt
-5. Press: 
+6. Press: 
 CTRL+Shift+P
 Python: Select Interpreter
 .venv (3.13.x)
-6. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
+7. You should now be able to see "run tests" button inside the test file in VSCode and able to run the tests
 Note: If encountering an error "File not found", check that your run-tests.sh End of Line Sequence is set to "LF"
