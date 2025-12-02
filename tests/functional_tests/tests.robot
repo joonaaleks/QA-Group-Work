@@ -2,7 +2,7 @@
 Resource    ../../resources/libraries.robot
 
 *** Variables ***
-${URL}         https://lichess.org
+${URL}         http://localhost:8080
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
 
