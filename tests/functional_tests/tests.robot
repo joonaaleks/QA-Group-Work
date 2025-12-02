@@ -5,12 +5,29 @@ Resource    ../../resources/libraries.robot
 ${URL}         http://localhost:8080
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
+${USERNAME_1}    ana
+${PASSWORD_1}    password
+${LOGIN_TIMEOUT}    5s
 
 *** Test Cases ***
 Open Google
     ${options}=    Get Chrome Options    headless=False
     Open Browser    https://google.com    chrome    options=${options}
     Page Should Contain    Google
+
+F1: User shall be able to login 
+    [Documentation]    F1: User shall be able to login
+    
+    Open Browser To Lichess
+    Click Element    xpath=//a[@class="signin"]
+    Wait Until Page Contains    Sign in        ${TIMEOUT}
+
+    Input Text    id=form3-username    ${USERNAME_1}
+    Input Text    id=form3-password    ${PASSWORD_1}
+
+    Click Button    xpath=//button[@class="submit button"]
+    Page Should Contain Element    xpath=//div[@class="dasher"]
+    [Teardown]    Close All Browsers 
 
 F5: User Can Join Match Against Online Opponent
     [Documentation]    F5: User shall be able to join and play against other online users
@@ -20,7 +37,8 @@ F5: User Can Join Match Against Online Opponent
     Verify Game Started
     [Teardown]    Close All Browsers
 
-*** Keywords ***
+
+*** Keywords ***    
 Get Chrome Options
     [Arguments]    ${headless}=True
     ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver
