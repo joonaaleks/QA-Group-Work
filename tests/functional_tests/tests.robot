@@ -36,6 +36,9 @@ Lichess F2: User shall be able to edit user profile
 
 Lichess F3: User shall be able to add their chess ratings to their profile
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Open Edit Profile Page
+    Page Should Contain Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
     [Teardown]    Close All Browsers
 
 Lichess F4: User shall be able to start a new chess game
@@ -81,7 +84,8 @@ Login To Lichess
 
 Open Edit Profile Page
     Click Element    xpath=//div[@class="dasher"]
-    Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
+    #Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
+    Sleep    1s
     Click Link    Preferences
     Wait Until Page Contains    Edit profile    ${TIMEOUT}
     
