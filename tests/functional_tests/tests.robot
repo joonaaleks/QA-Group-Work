@@ -15,8 +15,12 @@ Open Google
     Open Browser    https://google.com    chrome    options=${options}
     Page Should Contain    Google
 
-F1: User shall be able to login 
+Lichess F1/N2/N4: User shall be able to login 
     [Documentation]    F1: User shall be able to login
+    # N2 and N4 are covered as part of F1.
+    # N2: Software must be usable on the desktop version of the application.
+    # This is tested by running the tests in a desktop browser. "Open Browser To Lichess" keyword opens a desktop browser.
+    # N4: User login must take under 5 seconds. This is tested with LOGIN_TIMEOUT variable.
     
     Open Browser To Lichess
     Click Element    xpath=//a[@class="signin"]
@@ -26,10 +30,22 @@ F1: User shall be able to login
     Input Text    id=form3-password    ${PASSWORD_1}
 
     Click Button    xpath=//button[@class="submit button"]
-    Page Should Contain Element    xpath=//div[@class="dasher"]
+    Page Should Contain Element    xpath=//div[@class="dasher"]    ${LOGIN_TIMEOUT}
     [Teardown]    Close All Browsers 
 
-F5: User Can Join Match Against Online Opponent
+Lichess F2: User shall be able to edit user profile
+    Open Browser To Lichess
+    [Teardown]    Close All Browsers
+
+Lichess F3: User shall be able to add their chess ratings to their profile
+    Open Browser To Lichess
+    [Teardown]    Close All Browsers
+
+Lichess F4: User shall be able to start a new chess game
+    Open Browser To Lichess
+    [Teardown]    Close All Browsers
+
+Lichess F5: User Can Join Match Against Online Opponent
     [Documentation]    F5: User shall be able to join and play against other online users
     Open Browser To Lichess
     Open Lobby Tab
