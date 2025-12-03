@@ -43,6 +43,9 @@ Lichess F3: User shall be able to add their chess ratings to their profile
 
 Lichess F4: User shall be able to start a new chess game
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Start New Game Against Computer
+    Page Should Contain Element    css=cg-board    ${TIMEOUT}
     [Teardown]    Close All Browsers
 
 Lichess F5: User Can Join Match Against Online Opponent
@@ -89,6 +92,10 @@ Open Edit Profile Page
     Click Link    Preferences
     Wait Until Page Contains    Edit profile    ${TIMEOUT}
     
+Start New Game Against Computer
+    Click Button    Play against computer
+    Wait Until Page Contains    Game setup    ${TIMEOUT}
+    Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
     Wait Until Page Contains Element
