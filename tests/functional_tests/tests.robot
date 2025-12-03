@@ -23,18 +23,15 @@ Lichess F1/N2/N4: User shall be able to login
     # N4: User login must take under 5 seconds. This is tested with LOGIN_TIMEOUT variable.
     
     Open Browser To Lichess
-    Click Element    xpath=//a[@class="signin"]
-    Wait Until Page Contains    Sign in        ${TIMEOUT}
-
-    Input Text    id=form3-username    ${USERNAME_1}
-    Input Text    id=form3-password    ${PASSWORD_1}
-
-    Click Button    xpath=//button[@class="submit button"]
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
     Page Should Contain Element    xpath=//div[@class="dasher"]    ${LOGIN_TIMEOUT}
     [Teardown]    Close All Browsers 
 
 Lichess F2: User shall be able to edit user profile
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Open Edit Profile Page    
+    Page Should Contain     Edit profile        ${TIMEOUT}
     [Teardown]    Close All Browsers
 
 Lichess F3: User shall be able to add their chess ratings to their profile
@@ -70,6 +67,24 @@ Open Browser To Lichess
     Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
+
+Login To Lichess
+    [Arguments]    ${username}    ${password}
+    Click Element    xpath=//a[@class="signin"]
+    Wait Until Page Contains    Sign in        ${TIMEOUT}
+
+    Input Text    id=form3-username    ${username}
+    Input Text    id=form3-password    ${password}
+
+    Click Button    xpath=//button[@class="submit button"]
+    Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
+
+Open Edit Profile Page
+    Click Element    xpath=//div[@class="dasher"]
+    Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
+    Click Link    Preferences
+    Wait Until Page Contains    Edit profile    ${TIMEOUT}
+    
 
 Open Lobby Tab
     Wait Until Page Contains Element
