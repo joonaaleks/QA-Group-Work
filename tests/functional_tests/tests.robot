@@ -5,6 +5,9 @@ Resource    ../../resources/libraries.robot
 ${URL}         http://localhost:8080
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
+${USERNAME_1}    ana
+${PASSWORD_1}    password
+${LOGIN_TIMEOUT}    5s
 
 *** Test Cases ***
 Open Google
@@ -12,7 +15,40 @@ Open Google
     Open Browser    https://google.com    chrome    options=${options}
     Page Should Contain    Google
 
-F5: User Can Join Match Against Online Opponent
+Lichess F1/N2/N4: User shall be able to login 
+    [Documentation]    F1: User shall be able to login
+    # N2 and N4 are covered as part of F1.
+    # N2: Software must be usable on the desktop version of the application.
+    # This is tested by running the tests in a desktop browser. "Open Browser To Lichess" keyword opens a desktop browser.
+    # N4: User login must take under 5 seconds. This is tested with LOGIN_TIMEOUT variable.
+    
+    Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Page Should Contain Element    xpath=//div[@class="dasher"]    ${LOGIN_TIMEOUT}
+    [Teardown]    Close All Browsers 
+
+Lichess F2: User shall be able to edit user profile
+    Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Open Edit Profile Page    
+    Page Should Contain     Edit profile        ${TIMEOUT}
+    [Teardown]    Close All Browsers
+
+Lichess F3: User shall be able to add their chess ratings to their profile
+    Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Open Edit Profile Page
+    Page Should Contain Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
+    [Teardown]    Close All Browsers
+
+Lichess F4: User shall be able to start a new chess game
+    Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Start New Game Against Computer
+    Page Should Contain Element    css=cg-board    ${TIMEOUT}
+    [Teardown]    Close All Browsers
+
+Lichess F5: User Can Join Match Against Online Opponent
     [Documentation]    F5: User shall be able to join and play against other online users
     Open Browser To Lichess
     Open Lobby Tab
@@ -20,7 +56,8 @@ F5: User Can Join Match Against Online Opponent
     Verify Game Started
     [Teardown]    Close All Browsers
 
-*** Keywords ***
+
+*** Keywords ***    
 Get Chrome Options
     [Arguments]    ${headless}=True
     ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver
@@ -36,6 +73,29 @@ Open Browser To Lichess
     Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
+
+Login To Lichess
+    [Arguments]    ${username}    ${password}
+    Click Element    xpath=//a[@class="signin"]
+    Wait Until Page Contains    Sign in        ${TIMEOUT}
+
+    Input Text    id=form3-username    ${username}
+    Input Text    id=form3-password    ${password}
+
+    Click Button    xpath=//button[@class="submit button"]
+    Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
+
+Open Edit Profile Page
+    Click Element    xpath=//div[@class="dasher"]
+    #Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
+    Sleep    1s
+    Click Link    Preferences
+    Wait Until Page Contains    Edit profile    ${TIMEOUT}
+    
+Start New Game Against Computer
+    Click Button    Play against computer
+    Wait Until Page Contains    Game setup    ${TIMEOUT}
+    Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
     Wait Until Page Contains Element
