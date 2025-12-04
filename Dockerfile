@@ -45,7 +45,7 @@ RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.
     && rm -rf chromedriver-linux64*
 
 # Add Chrome to PATH
-ENV PATH="/opt/chrome/chrome-linux64:${PATH}"
+ENV PATH="/opt/chrome:${PATH}"
 
 # Install Dependencies
 COPY requirements.txt .
