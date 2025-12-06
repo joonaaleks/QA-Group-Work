@@ -61,7 +61,7 @@ Lichess F5: User Can Join Match Against Online Opponent
     [Teardown]    Close All Browsers
 
 Lichess F7: User shall be able to send and receive messages or challenges to other players
-    [Documentation]    Test sending a direct message to another player via search and profile.
+    [Documentation]    Tests sending a direct message to another player via search and profile.
     
     ${USERNAME_2}=    Set Variable    TestUserName22
     ${PASSWORD_2}=    Set Variable    TestUserName12
@@ -81,6 +81,23 @@ Lichess F7: User shall be able to send and receive messages or challenges to oth
     Send Direct Message    ${MESSAGE}
     
     VerifyDirectMessageSent    ${MESSAGE}
+    
+    [Teardown]    Close All Browsers
+
+Lichess F17: User shall be able to follow other users
+    [Documentation]    Tests the follow/unfollow functionality from a user's profile page.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    Follow And Unfollow User
     
     [Teardown]    Close All Browsers
 
@@ -155,25 +172,20 @@ Join Any Free Lobby Game
     Wait Until Keyword Succeeds    30s    1s    Click Free Lobby Game And Wait For Board
 
 Click Free Lobby Game And Wait For Board
-    # Find a free game row (hook + join, but NOT disabled)
     Wait Until Page Contains Element
     ...    xpath=//tbody//tr[contains(@class,"hook") and contains(@class,"join") and not(contains(@class,"disabled"))]
     ...    2s
 
-    # Click the first free game
     Click Element
     ...    xpath=(//tbody//tr[contains(@class,"hook") and contains(@class,"join") and not(contains(@class,"disabled"))])[1]
 
-    # Wait until a board appears
     Wait Until Page Contains Element    css=cg-board    3s
 
 Verify Game Started
     [Documentation]    Verifies that an ongoing game is displayed
     ...                (board + "You play the ... pieces").
-    # 1) Board is visible
     Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
 
-    # 2) Info text "You play the white/black pieces"
     Wait Until Page Contains    You play the    10s
 
     Log    Active game with board and info text "You play the ... pieces" is visible – requirement fulfilled.
@@ -190,7 +202,7 @@ Search For User And NavigateToProfile
     
     Wait Until Page Contains    ${target_user}    ${TIMEOUT}
     
-    Log    Successfully navigated to the profile page of ${target_user}.
+    Log    Successfully navigated to ${target_user}'s profile page.
 
 Send Direct Message
     [Arguments]    ${message}
@@ -208,3 +220,32 @@ VerifyDirectMessageSent
     ...    ${TIMEOUT}
     
     Log    Direct message successfully verified in the conversation history.
+
+Follow And Unfollow User
+    [Documentation]    Checks current state and performs follow/unfollow action, then reverses it.
+    
+    ${FOLLOW_LOCATOR}=    Set Variable    xpath=//a[@class="btn-rack__btn relation-button" and normalize-space(.)="Follow"]
+    ${UNFOLLOW_LOCATOR}=  Set Variable    xpath=//a[@class="btn-rack__btn relation-button" and normalize-space(.)="Unfollow"]
+    
+    # Initial Check: Unfollow if already following
+    ${count}=    Get Element Count    ${UNFOLLOW_LOCATOR}
+    Run Keyword If    ${count} > 0    Click Element    ${UNFOLLOW_LOCATOR}
+    
+    # Wait until the button is definitely 'Follow' before proceeding
+    Wait Until Element Is Visible    ${FOLLOW_LOCATOR}    ${TIMEOUT}
+    
+    # 1. Follow the user
+    Click Element    ${FOLLOW_LOCATOR}
+    Log    Clicked Follow.
+    
+    # 2. Verify successful follow (Button changes to Unfollow)
+    Wait Until Element Is Visible    ${UNFOLLOW_LOCATOR}    ${TIMEOUT}
+    Log    Successfully verified button changed to Unfollow.
+    
+    # 3. Clean up/Reverse: Unfollow the user
+    Click Element    ${UNFOLLOW_LOCATOR}
+    Log    Clicked Unfollow.
+    
+    # 4. Verify successful unfollow (Button changes back to Follow)
+    Wait Until Element Is Visible    ${FOLLOW_LOCATOR}    ${TIMEOUT}
+    Log    Successfully verified button changed back to Follow.
