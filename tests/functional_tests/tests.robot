@@ -61,7 +61,7 @@ Lichess F5: User Can Join Match Against Online Opponent
     [Teardown]    Close All Browsers
 
 Lichess F7: User shall be able to send and receive messages or challenges to other players
-    [Documentation]    Testet das Senden einer Direktnachricht an einen anderen Spieler über die Suche und das Profil.
+    [Documentation]    Test sending a direct message to another player via search and profile.
     
     ${USERNAME_2}=    Set Variable    TestUserName22
     ${PASSWORD_2}=    Set Variable    TestUserName12
@@ -190,7 +190,7 @@ Search For User And NavigateToProfile
     
     Wait Until Page Contains    ${target_user}    ${TIMEOUT}
     
-    Log    Erfolgreich zur Profilseite von ${target_user} navigiert.
+    Log    Successfully navigated to the profile page of ${target_user}.
 
 Send Direct Message
     [Arguments]    ${message}
