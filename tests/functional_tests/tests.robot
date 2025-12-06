@@ -9,6 +9,11 @@ ${USERNAME_1}    ana
 ${PASSWORD_1}    password
 ${LOGIN_TIMEOUT}    5s
 
+# Chrome preferences to disable password manager pop-up to change password
+&{CHROME_PREFS_NO_SAVE}    credentials_enable_service=${FALSE}
+...                        profile.password_manager_enabled=${FALSE}
+...                        profile.password_manager_leak_detection=${FALSE}
+
 *** Test Cases ***
 Open Google
     ${options}=    Get Chrome Options    headless=False
@@ -61,6 +66,9 @@ Lichess F5: User Can Join Match Against Online Opponent
 Get Chrome Options
     [Arguments]    ${headless}=True
     ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver
+
+    Call Method    ${options}    add_experimental_option    prefs    ${CHROME_PREFS_NO_SAVE}
+
     Call Method    ${options}    add_argument    --no-sandbox
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --disable-gpu
@@ -70,7 +78,8 @@ Get Chrome Options
     RETURN    ${options}
 
 Open Browser To Lichess
-    Open Browser    ${URL}    ${BROWSER}
+    ${options}=    Get Chrome Options    headless=False
+    Open Browser    ${URL}    ${BROWSER}    options=${options}
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
