@@ -1,8 +1,11 @@
 *** Settings ***
 Resource    ../../resources/libraries.robot
+Library     SeleniumLibrary
+Suite Setup    Setup Test Environment
 
 *** Variables ***
 ${URL}         http://localhost:8080
+${URL-LIVE}         https://lichess.org/
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
 ${USERNAME_1}    ana
@@ -62,8 +65,88 @@ Lichess F5: User Can Join Match Against Online Opponent
     Verify Game Started
     [Teardown]    Close All Browsers
 
+Lichess F7: User shall be able to send and receive messages or challenges to other players
+    [Documentation]    Tests sending a direct message to another player via search and profile.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    ${MESSAGE}=       Set Variable    Hallo
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    Click Element    xpath=//a[@class="btn-rack__btn" and @data-icon=""]
+    
+    Wait Until Page Contains Element    xpath=//textarea[@class="msg-app__convo__post__text"]    ${TIMEOUT}
+    
+    Send Direct Message    ${MESSAGE}
+    
+    VerifyDirectMessageSent    ${MESSAGE}
+    
+    [Teardown]    Close All Browsers
+
+Lichess F17: User shall be able to follow other users
+    [Documentation]    Tests the follow/unfollow functionality from a user's profile page.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    Follow And Unfollow User
+    
+    [Teardown]    Close All Browsers
+
+Lichess F19: The user shall be able to concede a game
+    [Documentation]    Tests the user's ability to concede a game after rejoining.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    Start 5+0 Game
+    Log    Game started, closing browser to simulate interruption.
+    
+    Close All Browsers
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Join Resumed Game
+    
+    Concede Game
+    
+    [Teardown]    Close All Browsers
+
+Lichess F20: The user shall be able to search for other players and view their profiles
+    [Documentation]    Tests searching for a user, navigating to the profile, and viewing their games list.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    [Teardown]    Close All Browsers
 
 *** Keywords ***    
+Setup Test Environment
+    BuiltIn.Set Global Variable    ${KEY_ENTER}    \ue007
+    
 Get Chrome Options
     [Arguments]    ${headless}=True
     ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver
@@ -84,6 +167,11 @@ Open Browser To Lichess
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
+Open Browser To Lichess.org
+    Open Browser    ${URL-LIVE}    ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Timeout    ${TIMEOUT}
+
 Login To Lichess
     [Arguments]    ${username}    ${password}
     Click Element    xpath=//a[@class="signin"]
@@ -93,6 +181,17 @@ Login To Lichess
     Input Text    id=form3-password    ${password}
 
     Click Button    xpath=//button[@class="submit button"]
+    Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
+
+Login To Lichess Specific
+    [Arguments]    ${username}    ${password}
+    Click Element    xpath=//a[@class="signin"]
+    Wait Until Page Contains Element    xpath=//input[@id="form3-username"]        ${TIMEOUT}
+
+    Input Text    xpath=//input[@id="form3-username"]    ${username}
+    Input Text    xpath=//input[@id="form3-password"]    ${password}
+
+    Click Button    xpath=//button[@type="submit" and normalize-space(.)="Sign in"]
     Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
 
 Open Edit Profile Page
@@ -144,3 +243,83 @@ Verify Game Started
 
     Log    Active game with board and info text "You play the ... pieces" is visible – requirement fulfilled.
 
+Search For User And NavigateToProfile
+    [Arguments]    ${target_user}
+    
+    Click Element    xpath=//a[@class="link" and @data-icon=""]
+    
+    Wait Until Element Is Visible    xpath=//input[@aria-label="Search"]    ${TIMEOUT}
+    
+    Input Text    xpath=//input[@aria-label="Search"]    ${target_user}
+    Press Keys    xpath=//input[@aria-label="Search"]    ${KEY_ENTER}
+    
+    Wait Until Page Contains    ${target_user}    ${TIMEOUT}
+    
+    Log    Successfully navigated to ${target_user}'s profile page.
+
+Send Direct Message
+    [Arguments]    ${message}
+    
+    Input Text    xpath=//textarea[@class="msg-app__convo__post__text"]    ${message}
+    
+    Press Keys    xpath=//textarea[@class="msg-app__convo__post__text"]    ${KEY_ENTER}
+    Sleep    2s
+
+VerifyDirectMessageSent
+    [Arguments]    ${expected_message}
+    
+    Wait Until Page Contains Element
+    ...    xpath=//mine[.//t[normalize-space(.)="${expected_message}"]]
+    ...    ${TIMEOUT}
+    
+    Log    Direct message successfully verified in the conversation history.
+
+Follow And Unfollow User
+    [Documentation]    Checks current state and performs follow/unfollow action, then reverses it.
+    
+    ${FOLLOW_LOCATOR}=    Set Variable    xpath=//a[@class="btn-rack__btn relation-button" and normalize-space(.)="Follow"]
+    ${UNFOLLOW_LOCATOR}=  Set Variable    xpath=//a[@class="btn-rack__btn relation-button" and normalize-space(.)="Unfollow"]
+    
+    # Initial Check: Unfollow if already following
+    ${count}=    Get Element Count    ${UNFOLLOW_LOCATOR}
+    Run Keyword If    ${count} > 0    Click Element    ${UNFOLLOW_LOCATOR}
+    
+    # Wait until the button is definitely 'Follow' before proceeding
+    Wait Until Element Is Visible    ${FOLLOW_LOCATOR}    ${TIMEOUT}
+    
+    # 1. Follow the user
+    Click Element    ${FOLLOW_LOCATOR}
+    Log    Clicked Follow.
+    
+    # 2. Verify successful follow (Button changes to Unfollow)
+    Wait Until Element Is Visible    ${UNFOLLOW_LOCATOR}    ${TIMEOUT}
+    Log    Successfully verified button changed to Unfollow.
+    
+    # 3. Clean up/Reverse: Unfollow the user
+    Click Element    ${UNFOLLOW_LOCATOR}
+    Log    Clicked Unfollow.
+    
+    # 4. Verify successful unfollow (Button changes back to Follow)
+    Wait Until Element Is Visible    ${FOLLOW_LOCATOR}    ${TIMEOUT}
+    Log    Successfully verified button changed back to Follow.
+
+Start 5+0 Game
+    [Documentation]    Starts a new 5+0 game by clicking the quick pairing button.
+    Click Element    xpath=//div[@role="button" and @data-id="5+0"]
+    Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
+    Log    5+0 game successfully started.
+
+Join Resumed Game
+    [Documentation]    Joins an ongoing game after re-logging in.
+    ${JOIN_LOCATOR}=    Set Variable    xpath=//a[@class="text button button-fat" and normalize-space(text())='Join the game']
+    Wait Until Element Is Visible    ${JOIN_LOCATOR}    ${TIMEOUT}
+    Click Element    ${JOIN_LOCATOR}
+    Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
+    Log    Successfully joined resumed game.
+
+Concede Game
+    [Documentation]    Concedes the current game.
+    Wait Until Element Is Visible    xpath=//button[normalize-space(text())='Resign'] | //button[@title='Resign']    ${TIMEOUT}
+    Click Element    xpath=//button[normalize-space(text())='Resign'] | //button[@title='Resign']
+    Wait Until Page Contains Element    xpath=//div[contains(@class, 'status') or contains(@class, 'result')]    ${TIMEOUT}
+    Log    Game conceded successfully.
