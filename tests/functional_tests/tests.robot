@@ -1,13 +1,17 @@
 *** Settings ***
 Resource    ../../resources/libraries.robot
+Library     SeleniumLibrary
+Suite Setup    Setup Test Environment
 
 *** Variables ***
 ${URL}         http://localhost:8080
+${URL-LIVE}         https://lichess.org/
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
 ${USERNAME_1}    ana
 ${PASSWORD_1}    password
 ${LOGIN_TIMEOUT}    5s
+
 
 *** Test Cases ***
 Open Google
@@ -50,14 +54,41 @@ Lichess F4: User shall be able to start a new chess game
 
 Lichess F5: User Can Join Match Against Online Opponent
     [Documentation]    F5: User shall be able to join and play against other online users
-    Open Browser To Lichess
+    Open Browser To Lichess.org
     Open Lobby Tab
     Join Any Free Lobby Game
     Verify Game Started
     [Teardown]    Close All Browsers
 
+Lichess F7: User shall be able to send and receive messages or challenges to other players
+    [Documentation]    Testet das Senden einer Direktnachricht an einen anderen Spieler über die Suche und das Profil.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    ${MESSAGE}=       Set Variable    Hallo
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    Click Element    xpath=//a[@class="btn-rack__btn" and @data-icon=""]
+    
+    Wait Until Page Contains Element    xpath=//textarea[@class="msg-app__convo__post__text"]    ${TIMEOUT}
+    
+    Send Direct Message    ${MESSAGE}
+    
+    VerifyDirectMessageSent    ${MESSAGE}
+    
+    [Teardown]    Close All Browsers
 
-*** Keywords ***    
+
+*** Keywords ***
+Setup Test Environment
+    BuiltIn.Set Global Variable    ${KEY_ENTER}    \ue007
+    
 Get Chrome Options
     [Arguments]    ${headless}=True
     ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver
@@ -74,6 +105,11 @@ Open Browser To Lichess
     Maximize Browser Window
     Set Selenium Timeout    ${TIMEOUT}
 
+Open Browser To Lichess.org
+    Open Browser    ${URL-LIVE}    ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Timeout    ${TIMEOUT}
+
 Login To Lichess
     [Arguments]    ${username}    ${password}
     Click Element    xpath=//a[@class="signin"]
@@ -85,9 +121,19 @@ Login To Lichess
     Click Button    xpath=//button[@class="submit button"]
     Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
 
+Login To Lichess Specific
+    [Arguments]    ${username}    ${password}
+    Click Element    xpath=//a[@class="signin"]
+    Wait Until Page Contains    Sign in        ${TIMEOUT}
+
+    Input Text    xpath=//input[@id="form3-username"]    ${username}
+    Input Text    xpath=//input[@id="form3-password"]    ${password}
+
+    Click Button    xpath=//button[@type="submit" and normalize-space(.)="Sign in"]
+    Wait Until Page Contains Element    xpath=//div[@class="lobby__start"]    ${TIMEOUT}
+
 Open Edit Profile Page
     Click Element    xpath=//div[@class="dasher"]
-    #Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
     Sleep    1s
     Click Link    Preferences
     Wait Until Page Contains    Edit profile    ${TIMEOUT}
@@ -132,3 +178,33 @@ Verify Game Started
 
     Log    Active game with board and info text "You play the ... pieces" is visible – requirement fulfilled.
 
+Search For User And NavigateToProfile
+    [Arguments]    ${target_user}
+    
+    Click Element    xpath=//a[@class="link" and @data-icon=""]
+    
+    Wait Until Element Is Visible    xpath=//input[@aria-label="Search"]    ${TIMEOUT}
+    
+    Input Text    xpath=//input[@aria-label="Search"]    ${target_user}
+    Press Keys    xpath=//input[@aria-label="Search"]    ${KEY_ENTER}
+    
+    Wait Until Page Contains    ${target_user}    ${TIMEOUT}
+    
+    Log    Erfolgreich zur Profilseite von ${target_user} navigiert.
+
+Send Direct Message
+    [Arguments]    ${message}
+    
+    Input Text    xpath=//textarea[@class="msg-app__convo__post__text"]    ${message}
+    
+    Press Keys    xpath=//textarea[@class="msg-app__convo__post__text"]    ${KEY_ENTER}
+    Sleep    2s
+
+VerifyDirectMessageSent
+    [Arguments]    ${expected_message}
+    
+    Wait Until Page Contains Element
+    ...    xpath=//mine[.//t[normalize-space(.)="${expected_message}"]]
+    ...    ${TIMEOUT}
+    
+    Log    Direct message successfully verified in the conversation history.
