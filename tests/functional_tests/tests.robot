@@ -101,6 +101,42 @@ Lichess F17: User shall be able to follow other users
     
     [Teardown]    Close All Browsers
 
+Lichess F19: The user shall be able to concede a game
+    [Documentation]    Tests the user's ability to concede a game after rejoining.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    Start 5+0 Game
+    Log    Game started, closing browser to simulate interruption.
+    
+    Close All Browsers
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Join Resumed Game
+    
+    Concede Game
+    
+    [Teardown]    Close All Browsers
+
+Lichess F20: The user shall be able to search for other players and view their profiles
+    [Documentation]    Tests searching for a user, navigating to the profile, and viewing their games list.
+    
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${TARGET_USER}=   Set Variable    Jtss
+    
+    Open Browser To Lichess.org
+    
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    [Teardown]    Close All Browsers
 
 *** Keywords ***
 Setup Test Environment
@@ -249,3 +285,24 @@ Follow And Unfollow User
     # 4. Verify successful unfollow (Button changes back to Follow)
     Wait Until Element Is Visible    ${FOLLOW_LOCATOR}    ${TIMEOUT}
     Log    Successfully verified button changed back to Follow.
+
+Start 5+0 Game
+    [Documentation]    Starts a new 5+0 game by clicking the quick pairing button.
+    Click Element    xpath=//div[@role="button" and @data-id="5+0"]
+    Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
+    Log    5+0 game successfully started.
+
+Join Resumed Game
+    [Documentation]    Joins an ongoing game after re-logging in.
+    ${JOIN_LOCATOR}=    Set Variable    xpath=//a[@class="text button button-fat" and normalize-space(text())='Join the game']
+    Wait Until Element Is Visible    ${JOIN_LOCATOR}    ${TIMEOUT}
+    Click Element    ${JOIN_LOCATOR}
+    Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
+    Log    Successfully joined resumed game.
+
+Concede Game
+    [Documentation]    Concedes the current game.
+    Wait Until Element Is Visible    xpath=//button[normalize-space(text())='Resign'] | //button[@title='Resign']    ${TIMEOUT}
+    Click Element    xpath=//button[normalize-space(text())='Resign'] | //button[@title='Resign']
+    Wait Until Page Contains Element    xpath=//div[contains(@class, 'status') or contains(@class, 'result')]    ${TIMEOUT}
+    Log    Game conceded successfully.
