@@ -19,6 +19,7 @@ Open Google
     ${options}=    Get Chrome Options    headless=False
     Open Browser    https://google.com    chrome    options=${options}
     Page Should Contain    Google
+    [Teardown]    Close All Browsers
 
 Lichess F1/N2/N4: User shall be able to login 
     [Documentation]    F1: User shall be able to login
@@ -36,7 +37,7 @@ Lichess F2: User shall be able to edit user profile
     Open Browser To Lichess
     Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
     Open Edit Profile Page    
-    Page Should Contain     Edit profile        ${TIMEOUT}
+    Page Should Contain Element     xpath=//textarea[@id="form3-bio"]        ${TIMEOUT}
     [Teardown]    Close All Browsers
 
 Lichess F3: User shall be able to add their chess ratings to their profile
@@ -86,7 +87,7 @@ Open Browser To Lichess
 Login To Lichess
     [Arguments]    ${username}    ${password}
     Click Element    xpath=//a[@class="signin"]
-    Wait Until Page Contains    Sign in        ${TIMEOUT}
+    Wait Until Page Contains Element    xpath=//input[@id="form3-username"]        ${TIMEOUT}
 
     Input Text    id=form3-username    ${username}
     Input Text    id=form3-password    ${password}
@@ -96,10 +97,9 @@ Login To Lichess
 
 Open Edit Profile Page
     Click Element    xpath=//div[@class="dasher"]
-    #Wait Until Page Contains Element    xpath=//div[@class="dropdown"]    ${TIMEOUT}
-    Sleep    1s
-    Click Link    Preferences
-    Wait Until Page Contains    Edit profile    ${TIMEOUT}
+    Wait Until Page Contains Element    xpath=//a[@href="/account/profile"]    ${TIMEOUT}
+    Click Element    xpath=//a[@href="/account/profile"]
+    Wait Until Page Contains Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
     
 Start New Game Against Computer
     Click Button    Play against computer
@@ -107,10 +107,11 @@ Start New Game Against Computer
     Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
+    # Select the middle tab (index 2) within the horizontal tabs so it's language-agnostic
     Wait Until Page Contains Element
-    ...    xpath=//span[@role="tab" and normalize-space(.)="Lobby"]
+    ...    xpath=//div[contains(@class,"tabs-horiz") and @role="tablist"]/span[2]
     ...    ${TIMEOUT}
-    Click Element    xpath=//span[@role="tab" and normalize-space(.)="Lobby"]
+    Click Element    xpath=//div[contains(@class,"tabs-horiz") and @role="tablist"]/span[2]
     Sleep    2s
 
 Join Any Free Lobby Game
@@ -137,7 +138,9 @@ Verify Game Started
     Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
 
     # 2) Info text "You play the white/black pieces"
-    Wait Until Page Contains    You play the    10s
+    Wait Until Page Contains Element
+    ...    xpath=//div[contains(@class,"message") and @data-icon]
+    ...    10s
 
     Log    Active game with board and info text "You play the ... pieces" is visible – requirement fulfilled.
 
