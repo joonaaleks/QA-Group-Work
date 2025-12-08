@@ -81,18 +81,22 @@ Lichess F7: User shall be able to send and receive messages or challenges to oth
 Lichess F9:
     [Documentation]    User should be able to reconnect to a game if the user disconnects.
     Log To Console    Init
+    Open Browser To Lichess
 
 Lichess F10:
     [Documentation]    User should be able to use the customization features of the platform.
     Log To Console    Init
+    Open Browser To Lichess
 
 Lichess F11:
     [Documentation]    User should be able to use the training features, and the platform should record the completed tasks.
     Log To Console    Init
+    Open Browser To Lichess
 
 Lichess F12:
     [Documentation]    Users should be able to complete puzzles, and the platform should record the results and completed puzzles.
     Log To Console    Init
+    Open Browser To Lichess
 
 
 Lichess F17: User shall be able to follow other users
