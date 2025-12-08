@@ -4,3 +4,4 @@ python/
 *.log
 *.xml
 *.png
+!security_test_results.html
