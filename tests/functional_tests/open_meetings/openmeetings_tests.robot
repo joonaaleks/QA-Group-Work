@@ -22,6 +22,17 @@ F1/N3: User shall be able to login
     Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
     Page Should Contain Button    xpath=//button[@id="id93"]    ${N_REQ_5S_TIMEOUT}
 
+F2 User shall be able to create a conference
+    [Documentation]    F2 User shall be able to create a conference
+
+    Open Browser To OpenMeetings
+    Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
+
+    Create a conference
+
+    # Verify that the conference was created by checking for the presence of the meeting canvas.
+    Page Should Contain Element    xpath=/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div/canvas[2]    ${TIMEOUT}
+
 F3: User shall be able to join a room
     [Documentation]    F3: User shall be able to join a room
 
