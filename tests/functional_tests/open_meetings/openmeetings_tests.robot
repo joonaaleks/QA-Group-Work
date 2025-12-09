@@ -31,3 +31,14 @@ F3: User shall be able to join a room
     Join a room
 
     Page Should Contain Element    xpath=//a[@id="id184"]    ${TIMEOUT}
+
+F4: User shall be able to search for other users
+    [Documentation]    F4: User shall be able to search for other users
+
+    Open Browser To OpenMeetings
+    Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
+
+    Search for user
+
+    # Verify that search results are displayed
+    Page Should Contain Element    xpath=//table[@id="searchUsersTable"]

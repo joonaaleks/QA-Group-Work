@@ -57,3 +57,14 @@ Join a room
     
     # Verify that user has joined the room by checking for presence of leave button
     Wait Until Element Is Visible    xpath=//a[@id="id184"]    ${TIMEOUT}
+
+Search for user
+    # Click search users link
+    Go To    ${URL}/openmeetings/#profile/search
+    Log    Navigated to user seach page.
+
+    # Search for a user
+    Wait Until Element Is Visible    xpath=/html/body/div[3]/div/div[2]/div/div/div/div/form/div[2]/button    ${TIMEOUT}
+    Input Text    xpath=//input[@name="text"]    firstname
+    Click Element    xpath=/html/body/div[3]/div/div[2]/div/div/div/div/form/div[2]/button
+    Wait Until Element Is Visible    xpath=//table[@id="searchUsersTable"]    ${TIMEOUT}
