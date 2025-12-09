@@ -98,6 +98,13 @@ Lichess F12:
     Log To Console    Init
     Open Browser To Lichess
 
+Lichess F13:
+    [Documentation]    The user shall be able to watch other users live matches.
+    Open Browser To Lichess.org
+    # For some reason Click Element does not work here
+    Execute JavaScript    document.querySelector('a[href="/games"]').click()
+    Click First Game In Now Playing
+    Page Should Contain Element    css=cg-board    ${TIMEOUT}
 
 Lichess F17: User shall be able to follow other users
     [Documentation]    Tests the follow/unfollow functionality from a user's profile page.

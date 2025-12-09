@@ -196,3 +196,9 @@ Concede Game
     Click Element    xpath=//button[normalize-space(text())='Resign'] | //button[@title='Resign']
     Wait Until Page Contains Element    xpath=//div[contains(@class, 'status') or contains(@class, 'result')]    ${TIMEOUT}
     Log    Game conceded successfully.
+
+Click First Game In Now Playing
+    [Documentation]    Clicks the first game in the now-playing grid.
+    Wait Until Page Contains Element    xpath=//div[contains(@class,"now-playing")]//a[contains(@class,"mini-game")]    ${TIMEOUT}
+    Click Element    xpath=//div[contains(@class,"now-playing")]//a[contains(@class,"mini-game")][1]
+    Log    Clicked first game in now-playing grid.
