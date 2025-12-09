@@ -8,7 +8,7 @@ ${BROWSER}     chrome
 ${TIMEOUT}     30s
 ${USERNAME_1}    ana
 ${PASSWORD_1}    password
-${LOGIN_TIMEOUT}    5s
+${N_REQ_5S_TIMEOUT}    5s
 ${KEY_ENTER}
 
 # Chrome preferences to disable password manager pop-up to change password
@@ -74,8 +74,9 @@ Open Edit Profile Page
     Wait Until Page Contains Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
     
 Start New Game Against Computer
+    [Arguments]    ${timeout}=${TIMEOUT}
     Click Button    Play against computer
-    Wait Until Page Contains    Game setup    ${TIMEOUT}
+    Wait Until Page Contains    Game setup    ${timeout}
     Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
@@ -104,15 +105,16 @@ Click Free Lobby Game And Wait For Board
     Wait Until Page Contains Element    css=cg-board    3s
 
 Verify Game Started
+    [Arguments]    ${timeout}=${TIMEOUT}
     [Documentation]    Verifies that an ongoing game is displayed
     ...                (board + "You play the ... pieces").
     # 1) Board is visible
-    Wait Until Page Contains Element    css=cg-board    ${TIMEOUT}
+    Wait Until Page Contains Element    css=cg-board    ${timeout}
 
     # 2) Info text "You play the white/black pieces"
     Wait Until Page Contains Element
     ...    xpath=//div[contains(@class,"message") and @data-icon]
-    ...    10s
+    ...    ${timeout}
 
     Log    Active game with board and info text "You play the ... pieces" is visible – requirement fulfilled.
 

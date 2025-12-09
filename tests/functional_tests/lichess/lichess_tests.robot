@@ -19,11 +19,11 @@ Lichess F1/N2/N4: User shall be able to login
     # N2 and N4 are covered as part of F1.
     # N2: Software must be usable on the desktop version of the application.
     # This is tested by running the tests in a desktop browser. "Open Browser To Lichess" keyword opens a desktop browser.
-    # N4: User login must take under 5 seconds. This is tested with LOGIN_TIMEOUT variable.
+    # N4: User login must take under 5 seconds. This is tested with N_REQ_5S_TIMEOUT variable.
     
     Open Browser To Lichess
     Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
-    Page Should Contain Element    xpath=//div[@class="dasher"]    ${LOGIN_TIMEOUT} 
+    Page Should Contain Element    xpath=//div[@class="dasher"]    ${N_REQ_5S_TIMEOUT} 
 
 
 Lichess F2: User shall be able to edit user profile
@@ -40,19 +40,26 @@ Lichess F3: User shall be able to add their chess ratings to their profile
     Page Should Contain Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
 
 
-Lichess F4: User shall be able to start a new chess game
+Lichess F4/N13: User shall be able to start a new chess game
+    [Documentation]    User shall be able to start a new chess game
+    # N13 is covered as a part of F4
+    # N13: A new game shall start within 5 seconds after both players accept
+    # This is tested with N_REQ_5S_TIMEOUT variable.
     Open Browser To Lichess
     Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
-    Start New Game Against Computer
+    Start New Game Against Computer    ${N_REQ_5S_TIMEOUT}
     Page Should Contain Element    css=cg-board    ${TIMEOUT}
 
 
-Lichess F5: User Can Join Match Against Online Opponent
+Lichess F5/N13: User Can Join Match Against Online Opponent
     [Documentation]    F5: User shall be able to join and play against other online users
+    # N13 is covered as a part of F4
+    # N13: A new game shall start within 5 seconds after both players accept
+    # This is tested with N_REQ_5S_TIMEOUT variable.
     Open Browser To Lichess
     Open Lobby Tab
     Join Any Free Lobby Game
-    Verify Game Started
+    Verify Game Started    ${N_REQ_5S_TIMEOUT}
 
 
 Lichess F7: User shall be able to send and receive messages or challenges to other players
