@@ -113,6 +113,15 @@ Lichess F14:
     Wait Until Element Is Visible    xpath=//dialog[@aria-labelledby]    ${TIMEOUT}
     Page Should Contain Element    xpath=//div[@class="radio-pane"]    ${TIMEOUT}
 
+Lichess F15:
+    [Documentation]    The user shall be able to invite a friend to a match.
+    Open Browser To Lichess
+    Click Button    xpath=//button[contains(@class,"lobby__start__button--friend")]
+    Wait Until Element Is Visible    xpath=//dialog[@aria-labelledby]    ${TIMEOUT}
+    Click Button    xpath=//button[contains(@class,"lobby__start__button--friend") and not(contains(@class,'active'))]
+    Sleep    0.5s
+    Page Should Contain Element    xpath=//main[contains(@class, "challenge--created")]    ${TIMEOUT}
+
 Lichess F17: User shall be able to follow other users
     [Documentation]    Tests the follow/unfollow functionality from a user's profile page.
     
