@@ -49,3 +49,11 @@ Login to OpenMeetings
     Input Text    xpath=/html/body/div[3]/div/div/div[2]/form/div[2]/div[2]/input    ${password}
     Click Element     xpath=//*[@id="id4"]
     Wait Until Element Is Visible    xpath=//button[@id="id93"]    ${TIMEOUT}
+
+Join a room
+    # Join a room.
+    Wait Until Element Is Visible    xpath=//button[@id="id80"]    ${TIMEOUT}
+    Click Element    xpath=//button[@id="id80"]
+    
+    # Verify that user has joined the room by checking for presence of leave button
+    Wait Until Element Is Visible    xpath=//a[@id="id184"]    ${TIMEOUT}

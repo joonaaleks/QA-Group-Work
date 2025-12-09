@@ -2,7 +2,8 @@
 Resource    ../../../resources/libraries.robot
 Resource    openmeetings.resource
 
-Suite Setup
+Suite Setup    Setup Test Environment
+Test Teardown    Close All Browsers 
 
 ##################    VARIABLES AND KEYWORDS ARE LOCATED IN THE RESOURCE FILE    ##################
 
@@ -20,3 +21,13 @@ F1/N3: User shall be able to login
     Open Browser To OpenMeetings
     Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
     Page Should Contain Button    xpath=//button[@id="id93"]    ${N_REQ_5S_TIMEOUT}
+
+F3: User shall be able to join a room
+    [Documentation]    F3: User shall be able to join a room
+
+    Open Browser To OpenMeetings
+    Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
+
+    Join a room
+
+    Page Should Contain Element    xpath=//a[@id="id184"]    ${TIMEOUT}
