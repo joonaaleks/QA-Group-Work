@@ -4,4 +4,7 @@ python/
 *.log
 *.xml
 *.png
-!security_test_results.html
+!security_test_results_lichess.html
+!security_test_results_apache.html
+!performance_results_apache.html
+!performance_results_lichess.html
