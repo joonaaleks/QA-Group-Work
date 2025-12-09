@@ -50,6 +50,15 @@ Login to OpenMeetings
     Click Element     xpath=//*[@id="id4"]
     Wait Until Element Is Visible    xpath=//button[@id="id93"]    ${TIMEOUT}
 
+Create a conference
+    Wait Until Element Is Visible    xpath=/html/body/div[3]/div/div[2]/div/div/div[2]/ul/li/div/div[3]/table/tbody/tr/td[2]/button[1]    ${TIMEOUT}
+    Click Element    xpath=/html/body/div[3]/div/div[2]/div/div/div[2]/ul/li/div/div[3]/table/tbody/tr/td[2]/button[1]
+
+    Wait Until Element Is Visible    xpath=/html/body/div[3]/div/div[2]/div/div[2]/div[1]/div    ${TIMEOUT}
+    Wait Until Element Is Visible    xpath=/html/body/div[3]/div/div[2]/div/div[2]/div[1]/div/table/tbody/tr[1]/td/button/span    ${TIMEOUT}
+    Click Element    xpath=/html/body/div[3]/div/div[2]/div/div[2]/div[1]/div/table/tbody/tr[1]/td/button/span
+
+    
 Join a room
     # Join a room.
     Wait Until Element Is Visible    xpath=//button[@id="id80"]    ${TIMEOUT}
