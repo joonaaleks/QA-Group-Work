@@ -106,6 +106,13 @@ Lichess F13:
     Click First Game In Now Playing
     Page Should Contain Element    css=cg-board    ${TIMEOUT}
 
+Lichess F14:
+    [Documentation]    The user shall be able to play against different rated computers.
+    Open Browser To Lichess
+    Click Button    xpath=//button[contains(@class,"lobby__start__button--ai")]
+    Wait Until Element Is Visible    xpath=//dialog[@aria-labelledby]    ${TIMEOUT}
+    Page Should Contain Element    xpath=//div[@class="radio-pane"]    ${TIMEOUT}
+
 Lichess F17: User shall be able to follow other users
     [Documentation]    Tests the follow/unfollow functionality from a user's profile page.
     
