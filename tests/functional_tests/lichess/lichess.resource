@@ -202,3 +202,10 @@ Click First Game In Now Playing
     Wait Until Page Contains Element    xpath=//div[contains(@class,"now-playing")]//a[contains(@class,"mini-game")]    ${TIMEOUT}
     Click Element    xpath=//div[contains(@class,"now-playing")]//a[contains(@class,"mini-game")][1]
     Log    Clicked first game in now-playing grid.
+
+Find Official FIDE Time Controls
+    [Documentation]    Looks for the following time controls: 30+20, 15+10, and 3+2.
+    Page Should Contain Element    xpath=//div[@data-id='30+20']    ${TIMEOUT}
+    Page Should Contain Element    xpath=//div[@data-id="15+10"]    ${TIMEOUT}
+    Page Should Contain Element    xpath=//div[@data-id="3+2"]    ${TIMEOUT}
+    Log    All official FIDE time controls found on the Quick Pairing page.

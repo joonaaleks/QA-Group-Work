@@ -122,6 +122,12 @@ Lichess F15:
     Sleep    0.5s
     Page Should Contain Element    xpath=//main[contains(@class, "challenge--created")]    ${TIMEOUT}
 
+Lichess F16:
+    [Documentation]    The user shall be able to play matches with different official time controls.
+    Open Browser To Lichess
+    Click Element    xpath=//div[contains(@class,"tabs-horiz") and @role="tablist"]/span[1]
+    Find Official FIDE Time Controls
+
 Lichess F17: User shall be able to follow other users
     [Documentation]    Tests the follow/unfollow functionality from a user's profile page.
     
