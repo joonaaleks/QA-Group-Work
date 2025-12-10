@@ -84,6 +84,7 @@ Start New Game Against Computer
         Click Element    //label[contains(@class, "color-picker") and @title="${choose_color}"]
     END
     Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
+    Wait Until Page Contains Element    xpath=//dialog[@aria-labelledby="lobby-setup-modal-title"]    ${timeout}
 
 Open Lobby Tab
     # Select the middle tab (index 2) within the horizontal tabs so it's language-agnostic
@@ -228,3 +229,29 @@ Reconnect To Game
     Click Element    xpath=//span[@class="active" and @role="tab"]
     Click Element    xpath=//span[contains(@class, 'mini-board') and contains(@class, 'cg-wrap')]
     Wait Until Page Contains Element    css=cg-board    timeout=10s
+    
+Change Board Style
+    [Arguments]    ${style_name}
+    [Documentation]    Changes the board style to the specified style name.
+    Click Element    xpath=//div[@class="dasher"]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//button[4]    ${TIMEOUT}
+    Click Button    xpath=//div[@id='dasher_app']//button[4]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//div[@class='list']    ${TIMEOUT}
+    Click Element    xpath=//div[@id='dasher_app']//div[@class='list']//button[@title='${style_name}']
+    
+    # Close the dasher menu
+    Click Button    xpath=//button[@class="head text"]
+    Click Element    xpath=//div[@class="dasher shown"]
+
+Change Piece Style
+    [Arguments]    ${style_name}
+    [Documentation]    Changes the piece style to the specified style name.
+    Click Element    xpath=//div[@class="dasher"]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//button[5]    ${TIMEOUT}
+    Click Button    xpath=//div[@id='dasher_app']//button[5]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//div[@class='list']    ${TIMEOUT}
+    Click Element    xpath=//div[@id='dasher_app']//div[@class='list']//button[@title='${style_name}']
+    
+    # Close the dasher menu
+    Click Button    xpath=//button[@class="head text"]
+    Click Element    xpath=//div[@class="dasher shown"]

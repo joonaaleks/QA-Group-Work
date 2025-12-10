@@ -251,3 +251,48 @@ Lichess N6: Interface Responsiveness
     Wait Until Page Contains Element    ${COMMUNITY_LINK_LOCATOR}    ${TIMEOUT}
     
     Log    Tablet responsiveness confirmed.
+
+Lichess N16:
+    [Documentation]    The UI such as chessboard and pieces should be customizable to the user’s preferences.
+
+    ${BOARD}=    Set Variable    purple
+    ${PIECES}=   Set Variable    rhosgfx
+
+    Open Browser To Lichess
+
+    ${INITIAL_BOARD_STYLE}=    Get Element Attribute    css=body    data-board
+    ${INITIAL_PIECE_STYLE}=    Get Element Attribute    css=body    data-piece-set
+
+    Log To Console    Initial board style: ${INITIAL_BOARD_STYLE}, piece style: ${INITIAL_PIECE_STYLE}
+
+    Change Board Style    ${BOARD}
+    Change Piece Style    ${PIECES}
+
+    ${NEW_BOARD_STYLE}=    Get Element Attribute    css=body    data-board
+    ${NEW_PIECE_STYLE}=    Get Element Attribute    css=body    data-piece-set
+
+    Should Be Equal    ${NEW_BOARD_STYLE}    ${BOARD}    msg=Board style did not update correctly.
+    Should Be Equal    ${NEW_PIECE_STYLE}    ${PIECES}    msg=Piece style did not update correctly.
+
+    Should Not Be Equal    ${INITIAL_BOARD_STYLE}    ${NEW_BOARD_STYLE}    msg=Board style did not change.
+    Should Not Be Equal    ${INITIAL_PIECE_STYLE}    ${NEW_PIECE_STYLE}    msg=Piece style did not change.
+
+    Log    Test Passed: UI customization verified successfully.
+
+Lichess N17: User shall be able to stay logged in
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${USER_TAG_LOCATOR}=    Set Variable    xpath=//a[@id="user_tag" and normalize-space(text())="${USERNAME_2}"]
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${N_REQ_5S_TIMEOUT}
+    Log    User successfully logged in (Tab 1).
+    
+    Execute JavaScript    window.open('${URL-LIVE}')
+    Switch Window    NEW
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${TIMEOUT}
+    
+    Log    Session successfully persisted in the new tab. User remains logged in.
