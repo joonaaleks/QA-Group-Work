@@ -10,6 +10,7 @@ ${USERNAME_1}    ana
 ${PASSWORD_1}    password
 ${N_REQ_5S_TIMEOUT}    5s
 ${KEY_ENTER}
+${PLAYER_COLOR}
 
 # Chrome preferences to disable password manager pop-up to change password
 &{CHROME_PREFS_NO_SAVE}    credentials_enable_service=${FALSE}
@@ -74,10 +75,16 @@ Open Edit Profile Page
     Wait Until Page Contains Element    xpath=//input[@id="form3-fideRating"]    ${TIMEOUT}
     
 Start New Game Against Computer
-    [Arguments]    ${timeout}=${TIMEOUT}
+    [Documentation]    Setup new game against computer. Colors: Black, White, Random side; Defaults to random
+    [Arguments]    ${timeout}=${TIMEOUT}    ${choose_color}=${EMPTY}
+    Click Button    Play against computer
+    Wait Until Page Contains    Game setup    ${timeout}
+    IF    '${choose_color}' != '${EMPTY}'
+        Wait Until Element Is Visible    //label[contains(@class, "color-picker") and @title="${choose_color}"]
+        Click Element    //label[contains(@class, "color-picker") and @title="${choose_color}"]
+    END
     Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
     Wait Until Page Contains Element    xpath=//dialog[@aria-labelledby="lobby-setup-modal-title"]    ${timeout}
-    Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
     # Select the middle tab (index 2) within the horizontal tabs so it's language-agnostic
@@ -217,6 +224,12 @@ Get Time
     ${time}=    Evaluate    time.time()    modules=time
     RETURN    ${time}
 
+Reconnect To Game
+    [Documentation]    Reconnects to an ongoing game by clicking the active game tab and clicking the game.
+    Click Element    xpath=//span[@class="active" and @role="tab"]
+    Click Element    xpath=//span[contains(@class, 'mini-board') and contains(@class, 'cg-wrap')]
+    Wait Until Page Contains Element    css=cg-board    timeout=10s
+    
 Change Board Style
     [Arguments]    ${style_name}
     [Documentation]    Changes the board style to the specified style name.
