@@ -204,4 +204,36 @@ Lichess N5: Response time below 2 seconds
     Log To Console    Search and navigation to ${TARGET_USER} took ${elapsed_time} seconds.
     
     Should Be True    ${elapsed_time} < ${MAX_TIME_S}
-    ...    msg=Die Benutzersuche und Profilnavigation dauerte ${elapsed_time} Sekunden, was die erforderlichen ${MAX_TIME_S} Sekunden überschreitet.
+    ...    msg=The user search and profile navigation took ${elapsed_time} seconds, which exceeds the required ${MAX_TIME_S} seconds.
+
+Lichess N6: Interface Responsiveness
+    [Documentation]    N6: The interface should remain responsive and usable on mobile devices and tablets.
+    
+    Open Browser To Lichess.org
+    
+    # --- Mobile Device Check (375x667) ---
+    Set Window Size    375    667
+    
+    ${MOBILE_MENU_LOCATOR}=    Set Variable    xpath=//label[@class="hbg"]
+    Wait Until Page Contains Element    ${MOBILE_MENU_LOCATOR}    ${TIMEOUT}
+    
+    Click Element    ${MOBILE_MENU_LOCATOR}
+    
+    Sleep    0.5s
+    
+    ${LOGIN_LINK_LOCATOR}=    Set Variable    xpath=//a[normalize-space(text())="Sign in"]
+    
+    Wait Until Element Is Visible    ${LOGIN_LINK_LOCATOR}    ${TIMEOUT}
+    
+    Log    Mobile responsiveness confirmed.
+    
+    # --- Tablet Device Check (1024x768) ---
+    Set Window Size    1024    768
+    
+    ${SITE_ICON_LOCATOR}=    Set Variable    xpath=//div[@class="site-icon" and @data-icon=""]
+    Wait Until Page Contains Element    ${SITE_ICON_LOCATOR}    ${TIMEOUT}
+    
+    ${COMMUNITY_LINK_LOCATOR}=    Set Variable    xpath=//header//nav//a[contains(text(), 'Community')]
+    Wait Until Page Contains Element    ${COMMUNITY_LINK_LOCATOR}    ${TIMEOUT}
+    
+    Log    Tablet responsiveness confirmed.
