@@ -185,7 +185,7 @@ Lichess F20: The user shall be able to search for other players and view their p
     
     Search For User And NavigateToProfile    ${TARGET_USER}
 
-Lichess N8: User search response time below 2 seconds
+Lichess N5: Response time below 2 seconds
     [Documentation]    Measures the time taken to search for a user profile (Jtss) and navigate to it, ensuring it's below the 2-second requirement.
     
     ${TARGET_USER}=       Set Variable    Jtss
