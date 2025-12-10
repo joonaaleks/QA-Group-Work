@@ -204,7 +204,39 @@ Lichess N5: Response time below 2 seconds
     Log To Console    Search and navigation to ${TARGET_USER} took ${elapsed_time} seconds.
     
     Should Be True    ${elapsed_time} < ${MAX_TIME_S}
-    ...    msg=Die Benutzersuche und Profilnavigation dauerte ${elapsed_time} Sekunden, was die erforderlichen ${MAX_TIME_S} Sekunden überschreitet.
+    ...    msg=The user search and profile navigation took ${elapsed_time} seconds, which exceeds the required ${MAX_TIME_S} seconds.
+
+Lichess N6: Interface Responsiveness
+    [Documentation]    N6: The interface should remain responsive and usable on mobile devices and tablets.
+    
+    Open Browser To Lichess.org
+    
+    # --- Mobile Device Check (375x667) ---
+    Set Window Size    375    667
+    
+    ${MOBILE_MENU_LOCATOR}=    Set Variable    xpath=//label[@class="hbg"]
+    Wait Until Page Contains Element    ${MOBILE_MENU_LOCATOR}    ${TIMEOUT}
+    
+    Click Element    ${MOBILE_MENU_LOCATOR}
+    
+    Sleep    0.5s
+    
+    ${LOGIN_LINK_LOCATOR}=    Set Variable    xpath=//a[normalize-space(text())="Sign in"]
+    
+    Wait Until Element Is Visible    ${LOGIN_LINK_LOCATOR}    ${TIMEOUT}
+    
+    Log    Mobile responsiveness confirmed.
+    
+    # --- Tablet Device Check (1024x768) ---
+    Set Window Size    1024    768
+    
+    ${SITE_ICON_LOCATOR}=    Set Variable    xpath=//div[@class="site-icon" and @data-icon=""]
+    Wait Until Page Contains Element    ${SITE_ICON_LOCATOR}    ${TIMEOUT}
+    
+    ${COMMUNITY_LINK_LOCATOR}=    Set Variable    xpath=//header//nav//a[contains(text(), 'Community')]
+    Wait Until Page Contains Element    ${COMMUNITY_LINK_LOCATOR}    ${TIMEOUT}
+    
+    Log    Tablet responsiveness confirmed.
 
 Lichess N16:
     [Documentation]    The UI such as chessboard and pieces should be customizable to the user’s preferences.
@@ -232,3 +264,21 @@ Lichess N16:
     Should Not Be Equal    ${INITIAL_PIECE_STYLE}    ${NEW_PIECE_STYLE}    msg=Piece style did not change.
 
     Log    Test Passed: UI customization verified successfully.
+
+Lichess N17: User shall be able to stay logged in
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${USER_TAG_LOCATOR}=    Set Variable    xpath=//a[@id="user_tag" and normalize-space(text())="${USERNAME_2}"]
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${N_REQ_5S_TIMEOUT}
+    Log    User successfully logged in (Tab 1).
+    
+    Execute JavaScript    window.open('${URL-LIVE}')
+    Switch Window    NEW
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${TIMEOUT}
+    
+    Log    Session successfully persisted in the new tab. User remains logged in.
