@@ -211,3 +211,8 @@ Find Official FIDE Time Controls
     Page Should Contain Element    xpath=//div[@data-id="15+10"]    ${TIMEOUT}
     Page Should Contain Element    xpath=//div[@data-id="3+2"]    ${TIMEOUT}
     Log    All official FIDE time controls found on the Quick Pairing page.
+
+Get Time
+    [Documentation]    Returns the current time in seconds since the epoch (float).
+    ${time}=    Evaluate    time.time()    modules=time
+    RETURN    ${time}

@@ -184,3 +184,24 @@ Lichess F20: The user shall be able to search for other players and view their p
     Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
     
     Search For User And NavigateToProfile    ${TARGET_USER}
+
+Lichess N8: User search response time below 2 seconds
+    [Documentation]    Measures the time taken to search for a user profile (Jtss) and navigate to it, ensuring it's below the 2-second requirement.
+    
+    ${TARGET_USER}=       Set Variable    Jtss
+    ${MAX_TIME_S}=        Set Variable    2
+    
+    Open Browser To Lichess.org
+    
+    ${start_time}=    Get Time
+    
+    Search For User And NavigateToProfile    ${TARGET_USER}
+    
+    ${end_time}=    Get Time
+    
+    ${elapsed_time}=    Evaluate    ${end_time} - ${start_time}
+    
+    Log To Console    Search and navigation to ${TARGET_USER} took ${elapsed_time} seconds.
+    
+    Should Be True    ${elapsed_time} < ${MAX_TIME_S}
+    ...    msg=Die Benutzersuche und Profilnavigation dauerte ${elapsed_time} Sekunden, was die erforderlichen ${MAX_TIME_S} Sekunden überschreitet.
