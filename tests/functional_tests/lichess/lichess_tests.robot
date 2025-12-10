@@ -237,3 +237,21 @@ Lichess N6: Interface Responsiveness
     Wait Until Page Contains Element    ${COMMUNITY_LINK_LOCATOR}    ${TIMEOUT}
     
     Log    Tablet responsiveness confirmed.
+
+Lichess N17: User shall be able to stay logged in
+    ${USERNAME_2}=    Set Variable    TestUserName22
+    ${PASSWORD_2}=    Set Variable    TestUserName12
+    ${USER_TAG_LOCATOR}=    Set Variable    xpath=//a[@id="user_tag" and normalize-space(text())="${USERNAME_2}"]
+    
+    Open Browser To Lichess.org
+    Login To Lichess Specific    ${USERNAME_2}    ${PASSWORD_2}
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${N_REQ_5S_TIMEOUT}
+    Log    User successfully logged in (Tab 1).
+    
+    Execute JavaScript    window.open('${URL-LIVE}')
+    Switch Window    NEW
+    
+    Wait Until Page Contains Element    ${USER_TAG_LOCATOR}    ${TIMEOUT}
+    
+    Log    Session successfully persisted in the new tab. User remains logged in.
