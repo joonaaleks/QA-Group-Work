@@ -75,8 +75,8 @@ Open Edit Profile Page
     
 Start New Game Against Computer
     [Arguments]    ${timeout}=${TIMEOUT}
-    Click Button    Play against computer
-    Wait Until Page Contains    Game setup    ${timeout}
+    Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
+    Wait Until Page Contains Element    xpath=//dialog[@aria-labelledby="lobby-setup-modal-title"]    ${timeout}
     Click Button    xpath=//button[@class="button button-metal lobby__start__button lobby__start__button--ai"]
 
 Open Lobby Tab
