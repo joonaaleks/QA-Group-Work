@@ -84,26 +84,40 @@ Lichess F7: User shall be able to send and receive messages or challenges to oth
     
     VerifyDirectMessageSent    ${MESSAGE}
 
-
-Lichess F9:
+Lichess F9: User should be able to reconnect to a game if the user disconnects
     [Documentation]    User should be able to reconnect to a game if the user disconnects.
-    Log To Console    Init
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Start New Game Against Computer    ${N_REQ_5S_TIMEOUT}    choose_color=White
+    Page Should Contain Element    css=cg-board    ${TIMEOUT}
+    Close Browser
+    Sleep    1s
+    Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Reconnect To Game
 
-Lichess F10:
+Lichess F10: User should be able to use the customization features of the platform
     [Documentation]    User should be able to use the customization features of the platform.
-    Log To Console    Init
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Click Element    xpath=//div[@class="dasher"]
+    Click Element    xpath=//button[@class="sub" and contains(text(), "Background")]
+    Click Button    xpath=//button[@type="button" and contains(text(), "Light")]
 
-Lichess F11:
+Lichess F11: User should be able to use the training features
     [Documentation]    User should be able to use the training features, and the platform should record the completed tasks.
-    Log To Console    Init
     Open Browser To Lichess
-
-Lichess F12:
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Click Element    xpath=//a[@href="/learn"]
+    Click Element    xpath=//a[contains(@class, 'stage ongoing') and contains(@href, '/learn#/1')]
+    
+Lichess F12: Users should be able to complete puzzles
     [Documentation]    Users should be able to complete puzzles, and the platform should record the results and completed puzzles.
-    Log To Console    Init
     Open Browser To Lichess
+    Login To Lichess    ${USERNAME_1}    ${PASSWORD_1}
+    Click Element    xpath=//a[@href="/training"]
+    Wait Until Page Contains Element    css=main.puzzle.puzzle-play    ${TIMEOUT}
+    Page Should Contain Element    css=cg-board    ${TIMEOUT}
 
 Lichess F13:
     [Documentation]    The user shall be able to watch other users live matches.
