@@ -216,3 +216,29 @@ Get Time
     [Documentation]    Returns the current time in seconds since the epoch (float).
     ${time}=    Evaluate    time.time()    modules=time
     RETURN    ${time}
+
+Change Board Style
+    [Arguments]    ${style_name}
+    [Documentation]    Changes the board style to the specified style name.
+    Click Element    xpath=//div[@class="dasher"]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//button[4]    ${TIMEOUT}
+    Click Button    xpath=//div[@id='dasher_app']//button[4]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//div[@class='list']    ${TIMEOUT}
+    Click Element    xpath=//div[@id='dasher_app']//div[@class='list']//button[@title='${style_name}']
+    
+    # Close the dasher menu
+    Click Button    xpath=//button[@class="head text"]
+    Click Element    xpath=//div[@class="dasher shown"]
+
+Change Piece Style
+    [Arguments]    ${style_name}
+    [Documentation]    Changes the piece style to the specified style name.
+    Click Element    xpath=//div[@class="dasher"]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//button[5]    ${TIMEOUT}
+    Click Button    xpath=//div[@id='dasher_app']//button[5]
+    Wait Until Element Is Visible    xpath=//div[@id='dasher_app']//div[@class='list']    ${TIMEOUT}
+    Click Element    xpath=//div[@id='dasher_app']//div[@class='list']//button[@title='${style_name}']
+    
+    # Close the dasher menu
+    Click Button    xpath=//button[@class="head text"]
+    Click Element    xpath=//div[@class="dasher shown"]

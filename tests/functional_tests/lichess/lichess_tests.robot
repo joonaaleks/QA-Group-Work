@@ -205,3 +205,30 @@ Lichess N5: Response time below 2 seconds
     
     Should Be True    ${elapsed_time} < ${MAX_TIME_S}
     ...    msg=Die Benutzersuche und Profilnavigation dauerte ${elapsed_time} Sekunden, was die erforderlichen ${MAX_TIME_S} Sekunden überschreitet.
+
+Lichess N16:
+    [Documentation]    The UI such as chessboard and pieces should be customizable to the user’s preferences.
+
+    ${BOARD}=    Set Variable    purple
+    ${PIECES}=   Set Variable    rhosgfx
+
+    Open Browser To Lichess
+
+    ${INITIAL_BOARD_STYLE}=    Get Element Attribute    css=body    data-board
+    ${INITIAL_PIECE_STYLE}=    Get Element Attribute    css=body    data-piece-set
+
+    Log To Console    Initial board style: ${INITIAL_BOARD_STYLE}, piece style: ${INITIAL_PIECE_STYLE}
+
+    Change Board Style    ${BOARD}
+    Change Piece Style    ${PIECES}
+
+    ${NEW_BOARD_STYLE}=    Get Element Attribute    css=body    data-board
+    ${NEW_PIECE_STYLE}=    Get Element Attribute    css=body    data-piece-set
+
+    Should Be Equal    ${NEW_BOARD_STYLE}    ${BOARD}    msg=Board style did not update correctly.
+    Should Be Equal    ${NEW_PIECE_STYLE}    ${PIECES}    msg=Piece style did not update correctly.
+
+    Should Not Be Equal    ${INITIAL_BOARD_STYLE}    ${NEW_BOARD_STYLE}    msg=Board style did not change.
+    Should Not Be Equal    ${INITIAL_PIECE_STYLE}    ${NEW_PIECE_STYLE}    msg=Piece style did not change.
+
+    Log    Test Passed: UI customization verified successfully.
