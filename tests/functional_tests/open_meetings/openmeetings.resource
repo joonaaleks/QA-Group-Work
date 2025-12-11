@@ -7,7 +7,8 @@ ${BROWSER}     chrome
 ${TIMEOUT}     30s
 ${USERNAME_1}    om_admin
 ${PASSWORD_1}    1Q2w3e4r5t^y
-${N_REQ_5S_TIMEOUT}    10s
+${N_REQ_10S_TIMEOUT}    10s
+${N_REQ_5S_TIMEOUT}    5s
 ${KEY_ENTER}
 
 # Chrome preferences to disable password manager pop-up to change password
