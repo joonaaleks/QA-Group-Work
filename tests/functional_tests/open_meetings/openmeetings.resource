@@ -3,12 +3,15 @@ Resource    ../../../resources/libraries.robot
 
 *** Variables ***
 ${URL}         https://localhost:5080
+${URL_HTTP}         http://localhost:5080
 ${BROWSER}     chrome
 ${TIMEOUT}     30s
 ${USERNAME_1}    om_admin
 ${PASSWORD_1}    1Q2w3e4r5t^y
-${N_REQ_5S_TIMEOUT}    10s
+${N_REQ_5S_TIMEOUT}    5s
+${N_REQ_10S_TIMEOUT}    10s
 ${KEY_ENTER}
+
 
 # Chrome preferences to disable password manager pop-up to change password
 &{CHROME_PREFS_NO_SAVE}    credentials_enable_service=${FALSE}
@@ -30,6 +33,22 @@ Get Chrome Options
     Call Method    ${options}    add_argument    --disable-gpu
     Call Method    ${options}    add_argument    --ignore-certificate-errors
     IF    '${headless}' == 'True'
+        Call Method    ${options}    add_argument    --headless
+    END
+    RETURN    ${options}
+
+Get Firefox Options
+    [Arguments]    ${headless}=False
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys
+    IF    '${headless}'=='True'
+        Call Method    ${options}    add_argument    -headless
+    END
+    RETURN    ${options}
+
+Get Edge Options
+    [Arguments]    ${headless}=False
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].EdgeOptions()    sys
+    IF    '${headless}'=='True'
         Call Method    ${options}    add_argument    --headless
     END
     RETURN    ${options}
@@ -77,3 +96,4 @@ Search for user
     Input Text    xpath=//input[@name="text"]    firstname
     Click Element    xpath=/html/body/div[3]/div/div[2]/div/div/div/div/form/div[2]/button
     Wait Until Element Is Visible    xpath=//table[@id="searchUsersTable"]    ${TIMEOUT}
+

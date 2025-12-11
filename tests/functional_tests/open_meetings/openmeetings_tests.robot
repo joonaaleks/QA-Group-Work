@@ -20,7 +20,7 @@ F1/N3: User shall be able to login
     
     Open Browser To OpenMeetings
     Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
-    Page Should Contain Button    xpath=//button[@id="id93"]    ${N_REQ_5S_TIMEOUT}
+    Page Should Contain Button    xpath=//button[@id="id93"]    ${N_REQ_10S_TIMEOUT}
 
 F2 User shall be able to create a conference
     [Documentation]    F2 User shall be able to create a conference
@@ -33,15 +33,16 @@ F2 User shall be able to create a conference
     # Verify that the conference was created by checking for the presence of the meeting canvas.
     Page Should Contain Element    xpath=/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div/div[1]/div[2]/div[1]/div/canvas[2]    ${TIMEOUT}
 
-F3: User shall be able to join a room
+F3/N9: User shall be able to join a room
     [Documentation]    F3: User shall be able to join a room
+    ...    N9: System response time for joining a meeting shall not exceed 5 seconds
 
     Open Browser To OpenMeetings
     Login To OpenMeetings    ${USERNAME_1}    ${PASSWORD_1}
 
     Join a room
 
-    Page Should Contain Element    xpath=//a[@id="id184"]    ${TIMEOUT}
+    Page Should Contain Element    xpath=//a[@id="id184"]    ${N_REQ_5S_TIMEOUT}
 
 F4: User shall be able to search for other users
     [Documentation]    F4: User shall be able to search for other users
@@ -53,3 +54,17 @@ F4: User shall be able to search for other users
 
     # Verify that search results are displayed
     Page Should Contain Element    xpath=//table[@id="searchUsersTable"]
+
+N11: The application should be usable on major browsers (Chrome, Firefox, Edge, Safari)
+    ${options}=    Get Chrome Options    headless=False
+    Open Browser    http://localhost:5080    chrome    options=${options}
+    Wait Until Element Is Visible    //h4[@class="modal-title" and @id="id1b"]
+    Close Browser
+    ${options}=    Get Firefox Options    headless=False
+    Open Browser    http://localhost:5080    firefox
+    Wait Until Element Is Visible    //h4[@class="modal-title" and @id="id1b"]
+    Close Browser
+    ${options}=    Get Edge Options    headless=False
+    Open Browser    http://localhost:5080    edge
+    Wait Until Element Is Visible    //h4[@class="modal-title" and @id="id1b"]
+    Close Browser
